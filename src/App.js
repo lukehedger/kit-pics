@@ -5,10 +5,25 @@ import { useGesture } from "react-with-gesture";
 import kits from "./kits.json";
 import logo from "./kit-pics.png";
 
-const cards = kits
-  .sort(() => 0.5 - Math.random())
-  .slice(0, 10)
-  .map(({ src }) => src);
+const getCards = () => {
+  const dislikedKits =
+    JSON.parse(localStorage.getItem("kitpics/dislikedKits")) || [];
+  const likedKits = JSON.parse(localStorage.getItem("kitpics/likedKits")) || [];
+
+  return kits
+    .map((kit, index) => ({
+      ...kit,
+      id: index
+    }))
+    .filter((value, index) => {
+      return likedKits.indexOf(index) < 0;
+    })
+    .filter((value, index) => {
+      return dislikedKits.indexOf(index) < 0;
+    })
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 10);
+};
 
 const to = i => ({
   x: 0,
@@ -26,6 +41,7 @@ const trans = (r, s) =>
 
 function Deck() {
   const [gone] = useState(() => new Set());
+  const [cards, setCards] = useState(() => getCards());
 
   const [springs, set] = useSprings(cards.length, i => ({
     ...to(i),
@@ -34,7 +50,7 @@ function Deck() {
 
   const bind = useGesture(
     ({
-      args: [index],
+      args: [index, cardID],
       down,
       delta: [xDelta],
       distance,
@@ -52,6 +68,26 @@ function Deck() {
         const rot = xDelta / 100 + (isGone ? dir * 10 * velocity : 0);
         const scale = down ? 1.1 : 1;
 
+        if (isGone && dir === -1) {
+          const dislikedKits =
+            JSON.parse(localStorage.getItem("kitpics/dislikedKits")) || [];
+
+          localStorage.setItem(
+            "kitpics/dislikedKits",
+            JSON.stringify([...dislikedKits, cardID])
+          );
+        }
+
+        if (isGone && dir === 1) {
+          const likedKits =
+            JSON.parse(localStorage.getItem("kitpics/likedKits")) || [];
+
+          localStorage.setItem(
+            "kitpics/likedKits",
+            JSON.stringify([...likedKits, cardID])
+          );
+        }
+
         return {
           x,
           rot,
@@ -61,8 +97,10 @@ function Deck() {
         };
       });
 
-      if (!down && gone.size === cards.length)
+      if (!down && gone.size === cards.length) {
         setTimeout(() => gone.clear() || set(i => to(i)), 600);
+        setCards(getCards());
+      }
     }
   );
   return springs.map(({ x, y, rot, scale }, i) => (
@@ -73,12 +111,14 @@ function Deck() {
       }}
     >
       <animated.div
-        {...bind(i)}
+        {...bind(i, cards[i].id)}
         style={{
           transform: interpolate([rot, scale], trans),
-          backgroundImage: `url(${cards[i]})`
+          backgroundImage: `url(${cards[i].src})`
         }}
-      />
+      >
+        <span>{cards[i].alt}</span>
+      </animated.div>
     </animated.div>
   ));
 }
