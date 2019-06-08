@@ -134,9 +134,15 @@ export default function App() {
 
       <Deck />
 
-      <Link className="link" to="/stats/">
-        Stats
-      </Link>
+      <nav>
+        <Link className="link" to="/about/">
+          About
+        </Link>
+        |
+        <Link className="link" to="/stats/">
+          Stats
+        </Link>
+      </nav>
     </>
   );
 }

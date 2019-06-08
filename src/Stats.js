@@ -104,7 +104,7 @@ const getStats = () => {
   };
 };
 
-export default function App() {
+export default function Stats() {
   const [stats] = useState(() => getStats());
 
   return (

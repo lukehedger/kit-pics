@@ -89,12 +89,17 @@ h1 {
   right: 8px;
 }
 
-.link {
+nav {
   width: 100vw;
+  text-align: center;
   position: absolute;
   bottom: 8px;
+  color: white;
+}
+
+.link {
+  margin: 0 8px;
   font-size: 14px;
-  text-align: center;
   color: white;
 }
 
@@ -153,6 +158,13 @@ p {
   width: 60px;
   margin: 0 8px;
   display: inline-block;
+}
+
+.about {
+  margin: 32px;
+  font-size: 18px;
+  text-align: center;
+  line-height: 24px;
 }
 
 @media only screen and (max-width: 420px) {
