@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useSprings, animated, interpolate } from "react-spring";
 import { useGesture } from "react-with-gesture";
 
@@ -104,7 +105,7 @@ function Deck() {
   );
   return springs.map(({ x, y, rot, scale }, i) => (
     <animated.div
-      class="kit"
+      className="kit"
       key={i}
       style={{
         transform: interpolate([x, y], (x, y) => `translate3d(${x}px,${y}px,0)`)
@@ -128,10 +129,14 @@ export default function App() {
     <>
       <h1>KIT PICS</h1>
 
-      <div class="swipe swipe-left" />
-      <div class="swipe swipe-right" />
+      <div className="swipe swipe-left" />
+      <div className="swipe swipe-right" />
 
       <Deck />
+
+      <Link className="link" to="/stats/">
+        Stats
+      </Link>
     </>
   );
 }
