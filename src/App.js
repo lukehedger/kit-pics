@@ -89,8 +89,6 @@ function Deck() {
             JSON.stringify([...likedKits, cardID])
           );
 
-          console.log(kits[cardID]);
-
           window.mixpanel.track("Liked kit", kits[cardID]);
         }
 
