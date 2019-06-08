@@ -3,7 +3,6 @@ import { useSprings, animated, interpolate } from "react-spring";
 import { useGesture } from "react-with-gesture";
 
 import kits from "./kits.json";
-import logo from "./kit-pics.png";
 
 const getCards = () => {
   const dislikedKits =
@@ -105,6 +104,7 @@ function Deck() {
   );
   return springs.map(({ x, y, rot, scale }, i) => (
     <animated.div
+      class="kit"
       key={i}
       style={{
         transform: interpolate([x, y], (x, y) => `translate3d(${x}px,${y}px,0)`)
@@ -126,16 +126,10 @@ function Deck() {
 export default function App() {
   return (
     <>
-      <img
-        style={{
-          width: "168px",
-          height: "77px",
-          margin: "0 auto -60px",
-          display: "block"
-        }}
-        alt="Kit Pics"
-        src={logo}
-      />
+      <h1>KIT PICS</h1>
+
+      <div class="swipe swipe-left" />
+      <div class="swipe swipe-right" />
 
       <Deck />
     </>

@@ -12,39 +12,42 @@ body {
   user-select: none;
   position: fixed;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Luckiest Guy", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+h1 {
+  text-align: center;
+  color: white;
+  letter-spacing: 4px;
+  font-size: 42px;
+  margin: 48px 0 0 0;
 }
 
 #root {
-  background: #6fcf97;
+  background: #0e704f;
   position: fixed;
   overflow: hidden;
   width: 100%;
   height: 100%;
 }
 
-#root > div {
+.kit {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#root > div > div {
+.kit > div {
   background-color: white;
-  background-size: contain;
+  background-size: 90%;
   background-repeat: no-repeat;
   background-position: center 20px;
   width: 45vh;
@@ -53,15 +56,56 @@ code {
   max-height: 470px;
   will-change: transform;
   border-radius: 4px;
-  box-shadow: 0 12.5px 100px -10px rgba(50, 50, 73, 0.2),
-    0 10px 10px -10px rgba(50, 50, 73, 0.1);
   cursor: grab;
+  border: 8px double black;
 }
 
-#root > div > div > span {
+.kit > div > span {
   width: 100%;
   position: absolute;
-  bottom: 16px;
+  bottom: 20px;
   text-align: center;
-  color: salmon;
+  color: goldenrod;
+  font-size: 22px;
+  letter-spacing: 1px;
+  padding: 0 8px;
+}
+
+.swipe {
+  width: 52px;
+  height: 74px;
+  position: absolute;
+  top: 40vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.swipe.swipe-left {
+  background-image: url("swipe-left.svg");
+  left: 8px;
+}
+.swipe.swipe-right {
+  background-image: url("swipe-right.svg");
+  right: 8px;
+}
+
+@media only screen and (max-width: 420px) {
+  h1 {
+    font-size: 32px;
+    margin-top: 32px;
+  }
+
+  .kit > div {
+    width: 35vh;
+    height: 65vh;
+  }
+
+  .kit > div > span {
+    font-size: 16px;
+  }
+
+  .swipe {
+    width: 42px;
+    height: 60px;
+  }
 }
