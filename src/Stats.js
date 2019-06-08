@@ -39,12 +39,6 @@ const getStats = () => {
       dislikedYears[kit.year] += 1;
     }
 
-    if (kit.type === "Home") {
-      homeKits += 1;
-    } else if (kit.type === "Away") {
-      awayKits += 1;
-    }
-
     return true;
   });
 
@@ -67,6 +61,12 @@ const getStats = () => {
       likedYears[kit.year] = 1;
     } else {
       likedYears[kit.year] += 1;
+    }
+
+    if (kit.type === "Home") {
+      homeKits += 1;
+    } else if (kit.type === "Away") {
+      awayKits += 1;
     }
 
     return true;
@@ -116,25 +116,25 @@ export default function App() {
           <li>
             <span>Top team</span>
 
-            <span>{stats.mostLikedTeam}</span>
+            <span>{stats.mostLikedTeam || "No kits liked yet!"}</span>
           </li>
 
           <li>
             <span>Bottom team</span>
 
-            <span>{stats.mostDislikedTeam}</span>
+            <span>{stats.mostDislikedTeam || "No kits disliked yet!"}</span>
           </li>
 
           <li>
             <span>Best year</span>
 
-            <span>{stats.mostLikedYear}</span>
+            <span>{stats.mostLikedYear || "No kits liked yet!"}</span>
           </li>
 
           <li>
             <span>Worst year</span>
 
-            <span>{stats.mostDislikedYear}</span>
+            <span>{stats.mostDislikedYear || "No kits disliked yet!"}</span>
           </li>
 
           <li>
@@ -144,21 +144,31 @@ export default function App() {
           </li>
         </ul>
 
-        <h4>Liked kits</h4>
+        <h4>Liked kits ({stats.likedKits.length})</h4>
 
-        <div className="kits-gallery">
-          {stats.likedKits.map((kit, i) => {
-            return <img key={i} src={kit.src} alt={kit.alt} />;
-          })}
-        </div>
+        {stats.likedKits.length > 0 ? (
+          <div className="kits-gallery">
+            {stats.likedKits.map((kit, i) => {
+              return <img key={i} src={kit.src} alt={kit.alt} />;
+            })}
+          </div>
+        ) : (
+          <p>No kits liked yet!</p>
+        )}
 
-        <h4 style={{ opacity: 0.5 }}>Disliked kits</h4>
+        <h4 style={{ opacity: 0.5 }}>
+          Disliked kits ({stats.dislikedKits.length})
+        </h4>
 
-        <div className="kits-gallery">
-          {stats.dislikedKits.map((kit, i) => {
-            return <img key={i} src={kit.src} alt={kit.alt} />;
-          })}
-        </div>
+        {stats.dislikedKits.length > 0 ? (
+          <div className="kits-gallery">
+            {stats.dislikedKits.map((kit, i) => {
+              return <img key={i} src={kit.src} alt={kit.alt} />;
+            })}
+          </div>
+        ) : (
+          <p style={{ opacity: 0.5 }}>No kits disliked yet!</p>
+        )}
       </div>
     </>
   );

@@ -134,6 +134,13 @@ h4 {
   letter-spacing: 1px;
 }
 
+p {
+  margin: 0 32px 16px;
+  color: white;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
 .kits-gallery {
   height: 80px;
   margin: 32px;
