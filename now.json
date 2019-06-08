@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "kit-pics",
-  "alias": "kit-pics",
+  "alias": "kit.pics",
   "builds": [
     {
       "src": "package.json",
