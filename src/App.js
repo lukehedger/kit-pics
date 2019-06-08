@@ -76,6 +76,8 @@ function Deck() {
             "kitpics/dislikedKits",
             JSON.stringify([...dislikedKits, cardID])
           );
+
+          window.mixpanel.track("Disliked kit", kits[cardID]);
         }
 
         if (isGone && dir === 1) {
@@ -86,6 +88,10 @@ function Deck() {
             "kitpics/likedKits",
             JSON.stringify([...likedKits, cardID])
           );
+
+          console.log(kits[cardID]);
+
+          window.mixpanel.track("Liked kit", kits[cardID]);
         }
 
         return {
