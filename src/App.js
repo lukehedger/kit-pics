@@ -5,12 +5,22 @@ import { useGesture } from "react-with-gesture";
 
 import kits from "./kits.json";
 
+const shuffleArray = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+};
+
 const getCards = () => {
   const dislikedKits =
     JSON.parse(localStorage.getItem("kitpics/dislikedKits")) || [];
   const likedKits = JSON.parse(localStorage.getItem("kitpics/likedKits")) || [];
 
-  return kits
+  const unseenKits = kits
     .map((kit, index) => ({
       ...kit,
       id: index
@@ -20,9 +30,9 @@ const getCards = () => {
     })
     .filter(kit => {
       return dislikedKits.indexOf(kit.id) < 0;
-    })
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 10);
+    });
+
+  return shuffleArray(unseenKits).slice(0, 10);
 };
 
 const to = i => ({
