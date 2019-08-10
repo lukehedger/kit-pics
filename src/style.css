@@ -35,6 +35,33 @@ h1 {
   height: 100%;
 }
 
+.hint {
+  animation: fade-out 0.5s 7s ease-in-out forwards;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  color: white;
+  left: 50%;
+  line-height: 1.5;
+  margin-left: -150px;
+  padding: 16px;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  top: 40vh;
+  width: 300px;
+  z-index: 1;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 .kit {
   position: absolute;
   width: 100vw;
@@ -78,6 +105,7 @@ h1 {
   top: 40vh;
   background-repeat: no-repeat;
   background-size: cover;
+  z-index: 1;
 }
 
 .swipe.swipe-left {

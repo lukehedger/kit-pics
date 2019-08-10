@@ -129,12 +129,26 @@ function Deck() {
 }
 
 export default function App() {
+  const [showHint, setShowHint] = useState("hidden");
+
   return (
     <>
       <h1>KIT PICS</h1>
 
-      <div className="swipe swipe-left" />
-      <div className="swipe swipe-right" />
+      {showHint === "visible" && (
+        <div className="hint">
+          Try swiping or dragging the kits! Right for a like, left for dislike.
+        </div>
+      )}
+
+      <div
+        className="swipe swipe-left"
+        onClick={() => setShowHint("visible")}
+      />
+      <div
+        className="swipe swipe-right"
+        onClick={() => setShowHint("visible")}
+      />
 
       <Deck />
 
