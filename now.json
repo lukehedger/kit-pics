@@ -1,7 +1,6 @@
 {
   "version": 2,
   "name": "kit-pics",
-  "alias": "kit.pics",
   "builds": [
     {
       "src": "package.json",
@@ -10,6 +9,11 @@
     }
   ],
   "routes": [
+    {
+      "src": "/kits/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "/kits/$1"
+    },
     {
       "src": "/static/(.*)",
       "headers": { "cache-control": "s-maxage=31536000,immutable" },
