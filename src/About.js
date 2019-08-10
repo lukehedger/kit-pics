@@ -1,16 +1,15 @@
 import React from "react";
-
-import kits from "./kits.json";
+import { Link } from "react-router-dom";
 
 export default function About() {
-  console.log(kits.length);
-
   return (
     <>
-      <h1>KIT PICS</h1>
+      <Link style={{ textDecoration: "none" }} to="/">
+        <h1>KIT PICS</h1>
+      </Link>
 
       <p className="about">
-        Swipe your way through all home and away kits from each Premier League
+        Swipe your way through all home and away kits from every Premier League
         season from 1992 to 2018 - that's 1,090 kits!
       </p>
 

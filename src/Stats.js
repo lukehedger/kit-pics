@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import kits from "./kits.json";
 
@@ -109,7 +110,9 @@ export default function Stats() {
 
   return (
     <>
-      <h1>KIT PICS</h1>
+      <Link style={{ textDecoration: "none" }} to="/">
+        <h1>KIT PICS</h1>
+      </Link>
 
       <div id="stats">
         <ul>
