@@ -15,11 +15,11 @@ const getCards = () => {
       ...kit,
       id: index
     }))
-    .filter((value, index) => {
-      return likedKits.indexOf(index) < 0;
+    .filter(kit => {
+      return likedKits.indexOf(kit.id) < 0;
     })
-    .filter((value, index) => {
-      return dislikedKits.indexOf(index) < 0;
+    .filter(kit => {
+      return dislikedKits.indexOf(kit.id) < 0;
     })
     .sort(() => 0.5 - Math.random())
     .slice(0, 10);
