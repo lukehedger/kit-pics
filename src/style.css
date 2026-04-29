@@ -133,7 +133,12 @@ nav {
 
 #stats {
   height: 90vh;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+#stats::-webkit-scrollbar {
+  display: none;
 }
 
 ul {
@@ -177,9 +182,14 @@ p {
 .kits-gallery {
   height: 80px;
   margin: 32px;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.kits-gallery::-webkit-scrollbar {
+  display: none;
 }
 
 .kits-gallery > img {
