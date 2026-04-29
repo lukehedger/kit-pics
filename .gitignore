@@ -19,3 +19,7 @@ bun.lockb
 .env.production.local
 
 npm-debug.log*
+
+# meeseeks
+.meeseeks
+TODO.md
