@@ -16,5 +16,5 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["src/**/*", "dev.ts", "webview.ts"]
+  "include": ["src/**/*", "dev.ts", "test.ts", "build.ts"]
 }
