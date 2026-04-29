@@ -64,12 +64,24 @@ h1 {
 
 .kit {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 80vh;
   will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  touch-action: none;
+}
+
+.kit.dragging {
+  transition: none;
+}
+
+.kit.gone {
+  pointer-events: none;
 }
 
 .kit > div {
