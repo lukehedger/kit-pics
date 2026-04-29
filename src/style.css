@@ -188,6 +188,23 @@ p {
   display: inline-block;
 }
 
+.kits-group {
+  margin-top: 16px;
+}
+
+.kits-group > .kits-gallery {
+  height: 80px;
+  margin: 8px 32px 16px;
+}
+
+.kits-group-label {
+  margin: 0 32px;
+  color: white;
+  font-size: 12px;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
 .about {
   margin: 32px;
   font-size: 18px;

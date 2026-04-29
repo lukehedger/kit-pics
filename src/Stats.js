@@ -16,6 +16,9 @@ const getStats = () => {
   const dislikedYears = {};
   const likedYears = {};
 
+  const likedKitsByTeam = {};
+  const likedKitsByYear = {};
+
   let awayKits = 0;
   let homeKits = 0;
 
@@ -64,6 +67,26 @@ const getStats = () => {
       likedYears[kit.year] += 1;
     }
 
+    if (!likedKitsByTeam[kit.team]) {
+      likedKitsByTeam[kit.team] = [];
+    }
+    likedKitsByTeam[kit.team].push({
+      alt: kit.alt,
+      src: kit.src,
+      type: kit.type,
+      year: kit.year
+    });
+
+    if (!likedKitsByYear[kit.year]) {
+      likedKitsByYear[kit.year] = [];
+    }
+    likedKitsByYear[kit.year].push({
+      alt: kit.alt,
+      src: kit.src,
+      team: kit.team,
+      type: kit.type
+    });
+
     if (kit.type === "Home") {
       homeKits += 1;
     } else if (kit.type === "Away") {
@@ -94,10 +117,20 @@ const getStats = () => {
     (a, b) => likedYears[a] < likedYears[b]
   )[0];
 
+  const likedKitsByTeamSorted = Object.keys(likedKitsByTeam)
+    .sort()
+    .map(team => ({ team, kits: likedKitsByTeam[team] }));
+
+  const likedKitsByYearSorted = Object.keys(likedKitsByYear)
+    .sort((a, b) => Number(b) - Number(a))
+    .map(year => ({ year, kits: likedKitsByYear[year] }));
+
   return {
     homeOrAway: homeOrAway,
     dislikedKits: dislikedKitsGallery,
     likedKits: likedKitsGallery,
+    likedKitsByTeam: likedKitsByTeamSorted,
+    likedKitsByYear: likedKitsByYearSorted,
     mostDislikedTeam: mostDislikedTeam,
     mostDislikedYear: mostDislikedYear,
     mostLikedTeam: mostLikedTeam,
@@ -146,6 +179,44 @@ export default function Stats() {
             <span>{stats.homeOrAway}</span>
           </li>
         </ul>
+
+        <h4>Liked kits by team</h4>
+
+        {stats.likedKitsByTeam.length > 0 ? (
+          stats.likedKitsByTeam.map(group => (
+            <div key={group.team} className="kits-group">
+              <p className="kits-group-label">
+                {group.team} ({group.kits.length})
+              </p>
+              <div className="kits-gallery">
+                {group.kits.map((kit, i) => (
+                  <img key={i} src={kit.src} alt={kit.alt} />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No kits liked yet!</p>
+        )}
+
+        <h4>Liked kits by season</h4>
+
+        {stats.likedKitsByYear.length > 0 ? (
+          stats.likedKitsByYear.map(group => (
+            <div key={group.year} className="kits-group">
+              <p className="kits-group-label">
+                {group.year} ({group.kits.length})
+              </p>
+              <div className="kits-gallery">
+                {group.kits.map((kit, i) => (
+                  <img key={i} src={kit.src} alt={kit.alt} />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No kits liked yet!</p>
+        )}
 
         <h4>Liked kits ({stats.likedKits.length})</h4>
 
