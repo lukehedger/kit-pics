@@ -10,10 +10,6 @@ export const renderAbout = (root: HTMLElement) => {
     </p>
 
     <p class="about">
-      Originally conceived on That Peter Crouch Podcast. Piss off Carl.
-    </p>
-
-    <p class="about">
       <span aria-label="football" role="img">⚽️</span>
     </p>
   `;
