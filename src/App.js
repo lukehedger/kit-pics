@@ -170,6 +170,10 @@ export default function App() {
         <Link className="link" to="/stats/">
           Stats
         </Link>
+        |
+        <Link className="link" to="/timeline/">
+          Timeline
+        </Link>
       </nav>
     </>
   );

@@ -195,6 +195,111 @@ p {
   line-height: 24px;
 }
 
+#timeline {
+  height: 82vh;
+  overflow-y: scroll;
+  padding-bottom: 32px;
+}
+
+.timeline-controls {
+  margin: 24px 32px 16px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.timeline-controls > label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.timeline-controls > select {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #0e704f;
+  background: white;
+  border: 4px double black;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.timeline-years {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.timeline-years::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 56px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.timeline-year {
+  position: relative;
+  padding: 8px 32px 8px 88px;
+  margin: 0;
+}
+
+.timeline-year-label {
+  position: absolute;
+  left: 16px;
+  top: 18px;
+  width: 80px;
+  color: white;
+  font-size: 18px;
+  letter-spacing: 1px;
+  background: #0e704f;
+  padding: 2px 0;
+  z-index: 1;
+}
+
+.timeline-year-kits {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.timeline-kit {
+  flex: 0 0 auto;
+  margin: 0;
+  background: white;
+  border: 4px double black;
+  border-radius: 4px;
+  padding: 8px 8px 4px;
+  width: 96px;
+  text-align: center;
+}
+
+.timeline-kit > img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.timeline-kit > figcaption {
+  color: goldenrod;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
 @media only screen and (max-width: 420px) {
   h1 {
     font-size: 32px;
