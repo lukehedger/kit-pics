@@ -1,12 +1,14 @@
 import { renderApp } from "./App.ts";
 import { renderAbout } from "./About.ts";
 import { renderStats } from "./Stats.ts";
+import { renderTimeline } from "./Timeline.ts";
 
 type Route = (root: HTMLElement) => void | (() => void);
 
 const routes: Array<[RegExp, Route]> = [
   [/^\/about\/?$/, renderAbout],
   [/^\/stats\/?$/, renderStats],
+  [/^\/timeline\/?$/, renderTimeline],
   [/^\/?$/, renderApp],
 ];
 

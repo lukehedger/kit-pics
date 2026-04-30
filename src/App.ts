@@ -251,6 +251,8 @@ export const renderApp = (root: HTMLElement): (() => void) => {
       <a class="link" href="/about/" data-link>About</a>
       |
       <a class="link" href="/stats/" data-link>Stats</a>
+      |
+      <a class="link" href="/timeline/" data-link>Timeline</a>
     </nav>
   `;
 

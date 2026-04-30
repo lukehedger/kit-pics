@@ -20,7 +20,15 @@ const staticRoutes: Record<string, string> = {
   "/swipe-right.svg": "./src/swipe-right.svg",
 };
 
-const spaRoutes = new Set(["/", "/about", "/about/", "/stats", "/stats/"]);
+const spaRoutes = new Set([
+  "/",
+  "/about",
+  "/about/",
+  "/stats",
+  "/stats/",
+  "/timeline",
+  "/timeline/",
+]);
 
 const bundled = await buildApp();
 
@@ -116,7 +124,7 @@ await run("home route renders deck", async () => {
   const linkCount = (await view.evaluate(
     "document.querySelectorAll('nav a[data-link]').length",
   )) as number;
-  check(linkCount === 2, `nav renders 2 data-link anchors (got ${linkCount})`);
+  check(linkCount === 3, `nav renders 3 data-link anchors (got ${linkCount})`);
   check((await collectInPageErrors()).length === 0, "no in-page errors on /");
 });
 
@@ -172,6 +180,36 @@ await run("seeded votes flow through to stats page", async () => {
   check(
     (await collectInPageErrors()).length === 0,
     "no in-page errors on seeded /stats/",
+  );
+});
+
+await run("timeline route renders sorted kits", async () => {
+  await view.navigate(`${base}/timeline/`);
+  await installErrorHook();
+  await waitFor(
+    "!!document.getElementById('timeline')",
+    "#timeline container present",
+  );
+  const teamOptions = (await view.evaluate(
+    "document.querySelectorAll('#team-select option').length",
+  )) as number;
+  check(teamOptions > 0, `team select has options (got ${teamOptions})`);
+  const firstYearTypes = (await view.evaluate(
+    "Array.from(document.querySelectorAll('.timeline-year')[0]?.querySelectorAll('.timeline-kit figcaption') ?? []).map((n) => n.textContent)",
+  )) as string[];
+  const order = { Home: 0, Away: 1, Third: 2 } as Record<string, number>;
+  const sorted = firstYearTypes.every(
+    (t, i) =>
+      i === 0 ||
+      (order[t] ?? 99) >= (order[firstYearTypes[i - 1]!] ?? 99),
+  );
+  check(
+    firstYearTypes.length > 0 && sorted,
+    `first year kits sorted Home/Away/Third (got ${JSON.stringify(firstYearTypes)})`,
+  );
+  check(
+    (await collectInPageErrors()).length === 0,
+    "no in-page errors on /timeline/",
   );
 });
 
