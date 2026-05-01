@@ -16,10 +16,17 @@ interface GalleryItem {
   team: string;
 }
 
+interface KitGroup {
+  label: string;
+  kits: GalleryItem[];
+}
+
 interface Stats {
   homeOrAway: string;
   dislikedKits: GalleryItem[];
   likedKits: GalleryItem[];
+  likedKitsByTeam: KitGroup[];
+  likedKitsByYear: KitGroup[];
   mostDislikedTeam: string | undefined;
   mostDislikedYear: string | undefined;
   mostLikedTeam: string | undefined;
@@ -53,6 +60,9 @@ const getStats = (): Stats => {
   const dislikedYears: Record<string, number> = {};
   const likedYears: Record<string, number> = {};
 
+  const likedByTeam: Record<string, GalleryItem[]> = {};
+  const likedByYear: Record<string, GalleryItem[]> = {};
+
   let awayKits = 0;
   let homeKits = 0;
 
@@ -67,9 +77,12 @@ const getStats = (): Stats => {
   for (const id of likedIds) {
     const kit = kits[id];
     if (!kit) continue;
-    likedKitsGallery.push({ alt: kit.alt, src: kit.src, team: kit.team });
+    const item = { alt: kit.alt, src: kit.src, team: kit.team };
+    likedKitsGallery.push(item);
     likedTeams[kit.team] = (likedTeams[kit.team] ?? 0) + 1;
     likedYears[kit.year] = (likedYears[kit.year] ?? 0) + 1;
+    (likedByTeam[kit.team] ??= []).push(item);
+    (likedByYear[kit.year] ??= []).push(item);
     if (kit.type === "Home") homeKits += 1;
     else if (kit.type === "Away") awayKits += 1;
   }
@@ -77,10 +90,20 @@ const getStats = (): Stats => {
   dislikedKitsGallery.sort((a, b) => (a.team > b.team ? 1 : -1));
   likedKitsGallery.sort((a, b) => (a.team > b.team ? 1 : -1));
 
+  const likedKitsByTeam: KitGroup[] = Object.keys(likedByTeam)
+    .sort()
+    .map((team) => ({ label: team, kits: likedByTeam[team]! }));
+
+  const likedKitsByYear: KitGroup[] = Object.keys(likedByYear)
+    .sort((a, b) => Number(b) - Number(a))
+    .map((year) => ({ label: year, kits: likedByYear[year]! }));
+
   return {
     homeOrAway: homeKits > awayKits ? "Home" : "Away",
     dislikedKits: dislikedKitsGallery,
     likedKits: likedKitsGallery,
+    likedKitsByTeam,
+    likedKitsByYear,
     mostDislikedTeam: topKey(dislikedTeams),
     mostDislikedYear: topKey(dislikedYears),
     mostLikedTeam: topKey(likedTeams),
@@ -100,6 +123,20 @@ const galleryMarkup = (items: GalleryItem[]) =>
     .map(
       (kit) =>
         `<img src="${escapeAttr(kit.src)}" alt="${escapeAttr(kit.alt)}" />`,
+    )
+    .join("");
+
+const groupsMarkup = (groups: KitGroup[]) =>
+  groups
+    .map(
+      (group) => `
+        <div class="kits-group">
+          <p class="kits-group-label">
+            ${escapeAttr(group.label)} (${group.kits.length})
+          </p>
+          <div class="kits-gallery">${galleryMarkup(group.kits)}</div>
+        </div>
+      `,
     )
     .join("");
 
@@ -134,6 +171,22 @@ export const renderStats = (root: HTMLElement) => {
           <span>${stats.homeOrAway}</span>
         </li>
       </ul>
+
+      <h4>Liked kits by team</h4>
+
+      ${
+        stats.likedKitsByTeam.length > 0
+          ? groupsMarkup(stats.likedKitsByTeam)
+          : `<p>No kits liked yet!</p>`
+      }
+
+      <h4>Liked kits by season</h4>
+
+      ${
+        stats.likedKitsByYear.length > 0
+          ? groupsMarkup(stats.likedKitsByYear)
+          : `<p>No kits liked yet!</p>`
+      }
 
       <h4>Liked kits (${stats.likedKits.length})</h4>
 

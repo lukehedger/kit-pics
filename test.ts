@@ -170,13 +170,20 @@ await run("seeded votes flow through to stats page", async () => {
     `top team populated after seeded likes (got ${JSON.stringify(topTeam)})`,
   );
   const likedImgs = (await view.evaluate(
-    "document.querySelectorAll('.kits-gallery')[0]?.querySelectorAll('img').length ?? 0",
+    "document.querySelectorAll('#stats > .kits-gallery')[0]?.querySelectorAll('img').length ?? 0",
   )) as number;
   check(likedImgs === 3, `liked gallery has 3 images (got ${likedImgs})`);
   const dislikedImgs = (await view.evaluate(
-    "document.querySelectorAll('.kits-gallery')[1]?.querySelectorAll('img').length ?? 0",
+    "document.querySelectorAll('#stats > .kits-gallery')[1]?.querySelectorAll('img').length ?? 0",
   )) as number;
   check(dislikedImgs === 1, `disliked gallery has 1 image (got ${dislikedImgs})`);
+  const teamGroupLabels = (await view.evaluate(
+    "Array.from(document.querySelectorAll('#stats .kits-group')).slice(0, 10).map(g => g.querySelector('.kits-group-label')?.textContent?.trim())",
+  )) as string[];
+  check(
+    teamGroupLabels.length > 0,
+    `liked kits grouped sections rendered (got ${teamGroupLabels.length} groups)`,
+  );
   check(
     (await collectInPageErrors()).length === 0,
     "no in-page errors on seeded /stats/",
