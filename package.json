@@ -1,16 +1,23 @@
 {
   "name": "kit-pics",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot ./dev.ts",
-    "build": "bun ./build.ts",
-    "test": "bun ./test.ts",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "wrangler deploy --dry-run --outdir=dist",
+    "seed:local": "node scripts/generate-seed.mjs && wrangler d1 execute kitpics --local --file=./migrations/0001_init.sql && wrangler d1 execute kitpics --local --file=./migrations/0002_seed_kits.sql",
+    "seed:remote": "node scripts/generate-seed.mjs && wrangler d1 execute kitpics --remote --file=./migrations/0001_init.sql && wrangler d1 execute kitpics --remote --file=./migrations/0002_seed_kits.sql",
+    "r2:upload": "bash scripts/upload-r2.sh",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "hono": "^4.6.14"
+  },
   "devDependencies": {
-    "@types/bun": "latest",
-    "typescript": "^5.5.0"
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.99.0"
   }
 }
