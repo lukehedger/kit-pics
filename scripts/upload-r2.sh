@@ -8,6 +8,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PATH="$SCRIPT_DIR/../node_modules/.bin:$PATH"
+
 BUCKET="${R2_BUCKET:-kit-pics-images}"
 SRC_DIR="${1:-kits-source}"
 
