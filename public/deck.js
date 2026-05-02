@@ -118,7 +118,7 @@ async function refillDeck() {
       el.appendChild(inner);
       deck.appendChild(el);
     });
-    layoutInitial();
+    requestAnimationFrame(() => requestAnimationFrame(layoutInitial));
   } catch {}
 }
 
