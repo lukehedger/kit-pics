@@ -4,6 +4,24 @@ import type { Kit } from "../types";
 
 export type TimelineData = Record<string, Record<string, Kit[]>>;
 
+const TYPE_RANK: Record<string, number> = { Home: 0, Away: 1, Third: 2 };
+const rankType = (t: string) => (t in TYPE_RANK ? TYPE_RANK[t]! : 99);
+
+export function buildTimeline(kits: Kit[]): TimelineData {
+  const timeline: TimelineData = {};
+  for (const kit of kits) {
+    if (!timeline[kit.team]) timeline[kit.team] = {};
+    if (!timeline[kit.team]![kit.year]) timeline[kit.team]![kit.year] = [];
+    timeline[kit.team]![kit.year]!.push(kit);
+  }
+  for (const team of Object.keys(timeline)) {
+    for (const year of Object.keys(timeline[team]!)) {
+      timeline[team]![year]!.sort((a, b) => rankType(a.type) - rankType(b.type));
+    }
+  }
+  return timeline;
+}
+
 type Props = {
   timeline: TimelineData;
   teams: string[];
