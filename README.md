@@ -21,20 +21,20 @@
 ## Local development
 
 ```sh
-npm install
-npx wrangler d1 create kitpics                     # copy the database_id into wrangler.toml
-npx wrangler r2 bucket create kit-pics-images
-npm run seed:local                                 # init schema + seed 1090 kits
+bun install
+bun x wrangler d1 create kitpics                   # copy the database_id into wrangler.toml
+bun x wrangler r2 bucket create kit-pics-images
+bun run seed:local                                 # init schema + seed 1090 kits
 ./scripts/upload-r2.sh                             # upload PNGs from kits-source/ to R2
-npm run dev
+bun run dev
 ```
 
 ## Deploy
 
 ```sh
-npm run seed:remote
+bun run seed:remote
 ./scripts/upload-r2.sh
-npm run deploy
+bun run deploy
 ```
 
 ## Layout
