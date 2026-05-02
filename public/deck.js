@@ -119,6 +119,10 @@ async function refillDeck() {
     const res = await fetch("/api/cards");
     const cards = await res.json();
     deck.innerHTML = "";
+    if (cards.length === 0) {
+      showEmptyState();
+      return;
+    }
     cards.forEach((kit) => {
       const el = document.createElement("div");
       el.className = "kit";
@@ -133,6 +137,24 @@ async function refillDeck() {
     });
     layoutInitial();
   } catch {}
+}
+
+function showEmptyState() {
+  document.querySelectorAll(".swipe").forEach((el) => el.remove());
+  const empty = document.createElement("div");
+  empty.className = "empty-state";
+  const h2 = document.createElement("h2");
+  h2.textContent = "All done!";
+  const p = document.createElement("p");
+  p.textContent = "You've rated every kit.";
+  const a = document.createElement("a");
+  a.className = "empty-cta";
+  a.href = "/stats/";
+  a.textContent = "See your picks";
+  empty.appendChild(h2);
+  empty.appendChild(p);
+  empty.appendChild(a);
+  deck.appendChild(empty);
 }
 
 layoutInitial();
