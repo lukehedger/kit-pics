@@ -60,7 +60,7 @@ function attachGestures(card) {
     const index = Number(card.dataset.index || 0);
     card.style.transform = `translate3d(${dx}px, ${index * -4}px, 0)`;
     const inner = card.firstElementChild;
-    inner.style.transform = `perspective(1500px) rotateX(30deg) rotateY(${rot / 10}deg) rotateZ(${rot}deg) scale(1.1)`;
+    inner.style.transform = `perspective(1500px) rotateX(30deg) rotateY(${rot / 10}deg) rotateZ(${rot}deg) scale(1)`;
   };
 
   const onUp = (e) => {
