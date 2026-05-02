@@ -1,12 +1,45 @@
 const deck = document.getElementById("deck");
 const hint = document.getElementById("hint");
 
-document.querySelectorAll("[data-hint]").forEach((el) => {
-  el.addEventListener("click", () => {
-    if (!hint) return;
-    hint.hidden = false;
-    setTimeout(() => (hint.hidden = true), 7000);
-  });
+const HINT_KEY = "kitpics-hint-seen";
+const HINT_MS = 7000;
+
+function showHint() {
+  if (!hint) return;
+  hint.hidden = false;
+  setTimeout(() => (hint.hidden = true), HINT_MS);
+}
+
+if (hint) {
+  try {
+    if (!localStorage.getItem(HINT_KEY)) {
+      showHint();
+      localStorage.setItem(HINT_KEY, "1");
+    }
+  } catch {
+    showHint();
+  }
+}
+
+document.querySelector(".swipe-left")?.addEventListener("click", () => {
+  voteTopCard("dislike");
+});
+document.querySelector(".swipe-right")?.addEventListener("click", () => {
+  voteTopCard("like");
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.target instanceof HTMLElement) {
+    const tag = e.target.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  }
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    voteTopCard("dislike");
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    voteTopCard("like");
+  }
 });
 
 function layoutInitial() {
@@ -31,6 +64,33 @@ function layoutInitial() {
       { once: true },
     );
   });
+}
+
+function topCard() {
+  const cards = [...deck.querySelectorAll(".kit")].filter(
+    (c) => !c.classList.contains("gone"),
+  );
+  return cards.length > 0 ? cards[cards.length - 1] : null;
+}
+
+function flyOff(card, dir) {
+  const index = Number(card.dataset.index || 0);
+  card.classList.add("gone");
+  const flyX = window.innerWidth * 1.5 * dir;
+  card.style.transform = `translate3d(${flyX}px, ${index * -4}px, 0)`;
+}
+
+function voteTopCard(vote) {
+  const card = topCard();
+  if (!card) return;
+  if (card.classList.contains("drop-in")) {
+    card.classList.remove("drop-in");
+    card.style.animationDelay = "";
+  }
+  const dir = vote === "like" ? 1 : -1;
+  flyOff(card, dir);
+  recordVote(Number(card.dataset.kitId), vote).catch(() => {});
+  checkDeckEmpty();
 }
 
 function attachGestures(card) {
@@ -76,9 +136,7 @@ function attachGestures(card) {
     const inner = card.firstElementChild;
 
     if (trigger) {
-      card.classList.add("gone");
-      const flyX = window.innerWidth * 1.5 * dir;
-      card.style.transform = `translate3d(${flyX}px, ${index * -4}px, 0)`;
+      flyOff(card, dir);
       recordVote(
         Number(card.dataset.kitId),
         dir === 1 ? "like" : "dislike",
@@ -105,38 +163,52 @@ async function recordVote(kitId, vote) {
   });
 }
 
+let refilling = false;
+
 function checkDeckEmpty() {
   const remaining = [...deck.querySelectorAll(".kit")].filter(
     (c) => !c.classList.contains("gone"),
   );
-  if (remaining.length === 0) {
-    setTimeout(refillDeck, 600);
+  if (remaining.length === 0 && !refilling) {
+    refilling = true;
+    refillDeck().finally(() => {
+      refilling = false;
+    });
   }
 }
 
 async function refillDeck() {
+  let cards;
   try {
-    const res = await fetch("/api/cards");
-    const cards = await res.json();
+    const [res] = await Promise.all([
+      fetch("/api/cards"),
+      new Promise((r) => setTimeout(r, 300)),
+    ]);
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    cards = await res.json();
+  } catch {
     deck.innerHTML = "";
-    if (cards.length === 0) {
-      showEmptyState();
-      return;
-    }
-    cards.forEach((kit) => {
-      const el = document.createElement("div");
-      el.className = "kit";
-      el.dataset.kitId = String(kit.id);
-      const inner = document.createElement("div");
-      inner.style.backgroundImage = `url(/kits/${kit.src})`;
-      const span = document.createElement("span");
-      span.textContent = kit.alt;
-      inner.appendChild(span);
-      el.appendChild(inner);
-      deck.appendChild(el);
-    });
-    layoutInitial();
-  } catch {}
+    showRefillError();
+    return;
+  }
+  deck.innerHTML = "";
+  if (cards.length === 0) {
+    showEmptyState();
+    return;
+  }
+  cards.forEach((kit) => {
+    const el = document.createElement("div");
+    el.className = "kit";
+    el.dataset.kitId = String(kit.id);
+    const inner = document.createElement("div");
+    inner.style.backgroundImage = `url(/kits/${kit.src})`;
+    const span = document.createElement("span");
+    span.textContent = kit.alt;
+    inner.appendChild(span);
+    el.appendChild(inner);
+    deck.appendChild(el);
+  });
+  layoutInitial();
 }
 
 function showEmptyState() {
@@ -155,6 +227,27 @@ function showEmptyState() {
   empty.appendChild(p);
   empty.appendChild(a);
   deck.appendChild(empty);
+}
+
+function showRefillError() {
+  const err = document.createElement("div");
+  err.className = "empty-state";
+  const h2 = document.createElement("h2");
+  h2.textContent = "Couldn't load";
+  const p = document.createElement("p");
+  p.textContent = "Check your connection and try again.";
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "empty-cta";
+  btn.textContent = "Retry";
+  btn.addEventListener("click", () => {
+    err.remove();
+    checkDeckEmpty();
+  });
+  err.appendChild(h2);
+  err.appendChild(p);
+  err.appendChild(btn);
+  deck.appendChild(err);
 }
 
 layoutInitial();
