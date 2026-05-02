@@ -14,6 +14,7 @@ export PATH="$SCRIPT_DIR/../node_modules/.bin:$PATH"
 
 BUCKET="${R2_BUCKET:-kit-pics-images}"
 SRC_DIR="${1:-kits-source}"
+TARGET_FLAG="${R2_TARGET:---remote}"
 
 if [[ ! -d "$SRC_DIR" ]]; then
   echo "source dir not found: $SRC_DIR" >&2
@@ -28,7 +29,7 @@ if (( total == 0 )); then
   exit 1
 fi
 
-echo "Uploading $total objects to r2://$BUCKET"
+echo "Uploading $total objects to r2://$BUCKET ($TARGET_FLAG)"
 
 ok=0
 fail=0
@@ -40,7 +41,7 @@ for f in "${files[@]}"; do
   if wrangler r2 object put "$BUCKET/$key" \
       --file "$f" \
       --content-type "image/png" \
-      --remote \
+      "$TARGET_FLAG" \
       --force \
       </dev/null >/dev/null; then
     ok=$((ok + 1))

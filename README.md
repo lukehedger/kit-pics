@@ -22,18 +22,18 @@
 
 ```sh
 bun install
-bun x wrangler d1 create kitpics                   # copy the database_id into wrangler.toml
-bun x wrangler r2 bucket create kit-pics-images
-bun run seed:local                                 # init schema + seed 1090 kits
-./scripts/upload-r2.sh                             # upload PNGs from kits-source/ to R2
+bun run seed:local                                 # init schema + seed 1090 kits into local D1
+bun run r2:upload:local                            # upload PNGs from kits-source/ into local R2
 bun run dev
 ```
 
 ## Deploy
 
 ```sh
+bun x wrangler d1 create kitpics                   # first time only, copy database_id into wrangler.toml
+bun x wrangler r2 bucket create kit-pics-images    # first time only
 bun run seed:remote
-./scripts/upload-r2.sh
+bun run r2:upload
 bun run deploy
 ```
 

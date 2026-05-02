@@ -10,6 +10,7 @@
     "seed:local": "node scripts/generate-seed.mjs && wrangler d1 execute kitpics --local --file=./migrations/0001_init.sql && wrangler d1 execute kitpics --local --file=./migrations/0002_seed_kits.sql",
     "seed:remote": "node scripts/generate-seed.mjs && wrangler d1 execute kitpics --remote --file=./migrations/0001_init.sql && wrangler d1 execute kitpics --remote --file=./migrations/0002_seed_kits.sql",
     "r2:upload": "bash scripts/upload-r2.sh",
+    "r2:upload:local": "R2_TARGET=--local bash scripts/upload-r2.sh",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
