@@ -4,8 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-bun.lock
-bun.lockb
 
 # production
 /build
