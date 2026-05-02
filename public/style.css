@@ -82,6 +82,7 @@ h1 {
 
 .kit.gone {
   pointer-events: none;
+  transition: transform 0.25s linear;
 }
 
 .kit.drop-in {

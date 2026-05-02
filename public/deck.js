@@ -77,10 +77,8 @@ function attachGestures(card) {
 
     if (trigger) {
       card.classList.add("gone");
-      const flyX = (200 + window.innerWidth) * dir;
-      const rot = Number(card.dataset.rot || 0) + dir * 10 * velocity;
+      const flyX = window.innerWidth * 1.5 * dir;
       card.style.transform = `translate3d(${flyX}px, ${index * -4}px, 0)`;
-      inner.style.transform = `perspective(1500px) rotateX(30deg) rotateY(${rot / 10}deg) rotateZ(${rot}deg) scale(1)`;
       recordVote(
         Number(card.dataset.kitId),
         dir === 1 ? "like" : "dislike",
