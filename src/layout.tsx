@@ -40,7 +40,6 @@ export const Layout: FC<Props> = ({
     </head>
     <body>
       <div id="root">{children}</div>
-      <script type="module" src="/tread.js"></script>
     </body>
   </html>
 );
