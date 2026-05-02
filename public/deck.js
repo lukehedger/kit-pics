@@ -19,6 +19,17 @@ function layoutInitial() {
     const inner = card.firstElementChild;
     inner.style.transform = `perspective(1500px) rotateX(30deg) rotateY(${rot / 10}deg) rotateZ(${rot}deg) scale(1)`;
     attachGestures(card);
+
+    card.style.animationDelay = `${i * 70}ms`;
+    card.classList.add("drop-in");
+    card.addEventListener(
+      "animationend",
+      () => {
+        card.classList.remove("drop-in");
+        card.style.animationDelay = "";
+      },
+      { once: true },
+    );
   });
 }
 
@@ -30,6 +41,10 @@ function attachGestures(card) {
 
   const onDown = (e) => {
     if (card.classList.contains("gone")) return;
+    if (card.classList.contains("drop-in")) {
+      card.classList.remove("drop-in");
+      card.style.animationDelay = "";
+    }
     pointerId = e.pointerId;
     card.setPointerCapture(pointerId);
     startX = e.clientX;
@@ -118,7 +133,7 @@ async function refillDeck() {
       el.appendChild(inner);
       deck.appendChild(el);
     });
-    requestAnimationFrame(() => requestAnimationFrame(layoutInitial));
+    layoutInitial();
   } catch {}
 }
 

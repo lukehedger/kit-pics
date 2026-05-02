@@ -72,7 +72,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   touch-action: none;
 }
 
@@ -82,6 +82,16 @@ h1 {
 
 .kit.gone {
   pointer-events: none;
+}
+
+.kit.drop-in {
+  animation: drop-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes drop-in {
+  from {
+    transform: translate3d(0, -120vh, 0) rotate(-8deg);
+  }
 }
 
 .kit > div {
@@ -97,6 +107,12 @@ h1 {
   border-radius: 4px;
   cursor: grab;
   border: 8px double black;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  backface-visibility: hidden;
+}
+
+.kit.dragging > div {
+  transition: none;
 }
 
 .kit > div > span {
