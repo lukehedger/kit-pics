@@ -5,8 +5,9 @@
 # `kit-pics-images` to exist (`wrangler r2 bucket create kit-pics-images`).
 #
 # Run from repo root: ./scripts/upload-r2.sh
+# Idempotent: wrangler r2 object put overwrites, so re-running is safe.
 
-set -euo pipefail
+set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$SCRIPT_DIR/../node_modules/.bin:$PATH"
@@ -19,15 +20,43 @@ if [[ ! -d "$SRC_DIR" ]]; then
   exit 1
 fi
 
-count=0
-for f in "$SRC_DIR"/*.png; do
-  [[ -e "$f" ]] || continue
+shopt -s nullglob
+files=("$SRC_DIR"/*.png)
+total=${#files[@]}
+if (( total == 0 )); then
+  echo "no .png files found in $SRC_DIR" >&2
+  exit 1
+fi
+
+echo "Uploading $total objects to r2://$BUCKET"
+
+ok=0
+fail=0
+failed_keys=()
+i=0
+for f in "${files[@]}"; do
+  i=$((i + 1))
   key="$(basename "$f")"
-  wrangler r2 object put "$BUCKET/$key" \
-    --file "$f" \
-    --content-type "image/png" \
-    --remote
-  count=$((count + 1))
+  if wrangler r2 object put "$BUCKET/$key" \
+      --file "$f" \
+      --content-type "image/png" \
+      --remote \
+      --force \
+      </dev/null >/dev/null; then
+    ok=$((ok + 1))
+  else
+    fail=$((fail + 1))
+    failed_keys+=("$key")
+    echo "  fail ($i/$total): $key" >&2
+  fi
+  if (( i % 50 == 0 )); then
+    echo "  progress $i/$total (ok=$ok fail=$fail)"
+  fi
 done
 
-echo "Uploaded $count objects to r2://$BUCKET"
+echo
+echo "Done: $ok / $total uploaded to r2://$BUCKET (failed: $fail)"
+if (( fail > 0 )); then
+  printf '  failed key: %s\n' "${failed_keys[@]}" >&2
+  exit 1
+fi
