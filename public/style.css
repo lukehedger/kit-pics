@@ -250,6 +250,20 @@ p {
   line-height: 24px;
 }
 
+.clear-session {
+  display: block;
+  margin: 32px auto;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #0e704f;
+  background: white;
+  border: 4px double black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 #timeline {
   height: 82vh;
   overflow-y: auto;

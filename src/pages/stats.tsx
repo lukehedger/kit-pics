@@ -98,6 +98,23 @@ export const Stats: FC<{ stats: StatsData }> = ({ stats }) => (
       ) : (
         <p style="opacity: 0.5">No kits disliked yet!</p>
       )}
+
+      <button type="button" id="clear-session" class="clear-session">
+        Clear session
+      </button>
     </div>
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          document.getElementById("clear-session")?.addEventListener("click", async () => {
+            if (!confirm("Wipe all your likes and dislikes and start fresh?")) return;
+            try {
+              await fetch("/api/session", { method: "DELETE" });
+            } catch {}
+            window.location.href = "/";
+          });
+        `,
+      }}
+    />
   </Layout>
 );

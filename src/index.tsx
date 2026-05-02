@@ -74,6 +74,14 @@ app.post("/api/votes", async (c) => {
   return c.json({ ok: true });
 });
 
+app.delete("/api/session", async (c) => {
+  const sid = getOrSetSession(c);
+  await c.env.DB.prepare(`DELETE FROM votes WHERE session_id = ?`)
+    .bind(sid)
+    .run();
+  return c.json({ ok: true });
+});
+
 app.get("/api/cards", async (c) => {
   const sid = getOrSetSession(c);
   const { results } = await c.env.DB.prepare(
