@@ -1,0 +1,20 @@
+name = "kit-pics"
+main = "src/index.tsx"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kitpics"
+database_id = "0dc991a3-c8ec-4160-84bf-e86e09944414"
+
+[[r2_buckets]]
+binding = "KITS"
+bucket_name = "kit-pics-images"
+
+[observability]
+enabled = true
