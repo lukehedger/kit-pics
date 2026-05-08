@@ -68,6 +68,7 @@ h1 {
   left: 0;
   width: 100vw;
   height: 80vh;
+  padding-top: 100px;
   will-change: transform;
   display: flex;
   align-items: center;
@@ -262,7 +263,7 @@ p {
   justify-content: center;
   color: white;
   text-align: center;
-  padding: 0 32px;
+  padding: 100px 32px 0;
 }
 
 .empty-state > h2 {
@@ -427,6 +428,10 @@ p {
     margin-top: 32px;
   }
 
+  .kit {
+    padding-top: 76px;
+  }
+
   .kit > div {
     width: 35vh;
     height: 65vh;
@@ -434,6 +439,10 @@ p {
 
   .kit > div > span {
     font-size: 16px;
+  }
+
+  .empty-state {
+    padding-top: 76px;
   }
 
   .swipe {
